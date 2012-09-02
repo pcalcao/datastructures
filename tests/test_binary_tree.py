@@ -46,8 +46,15 @@ class TestBinaryTree(unittest.TestCase):
         bTree = init_tree()
         self.assertEqual(bTree.search(3), bTree.right)
         bTree.delete(3)
-        #self.assertIsNone(bTree.search(3))
+        self.assertIsNone(bTree.search(3))
 
+    def test_delete_root(self):
+        bTree = init_tree()
+        self.assertEqual(bTree.search(2), bTree)
+        bTree.delete(2)
+        self.assertEqual(bTree.value, 3)
+        self.assertEqual(bTree.left, bTree.search(1))
+        self.assertIsNone(bTree.right)
 
 def init_tree():
     bTree = BinarySearchTree()
