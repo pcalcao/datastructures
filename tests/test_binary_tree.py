@@ -24,6 +24,8 @@ class TestBinaryTree(unittest.TestCase):
         bTree.put(3)
         self.assertEqual(3, bTree.right.value)
         self.assertEqual(bTree, bTree.right.parent)
+        bTree.put(5)
+        self.assertEqual(5, bTree.right.right.value)
 
 
     def test_search(self):
@@ -46,14 +48,38 @@ class TestBinaryTree(unittest.TestCase):
         bTree = init_tree()
         self.assertEqual(bTree.search(3), bTree.right)
         bTree.delete(3)
-        #self.assertIsNone(bTree.search(3))
+        self.assertIsNone(bTree.search(3))
+
+    def test_find_minimum(self):
+        bTree = init_tree()
+        min = bTree.find_minimum()
+        self.assertEqual(1, min.value)
 
 
-def init_tree():
+    def test_delete_root_one_child(self):
+        bTree = init_tree((3,5,4,6))
+        bTree.delete(3)
+        self.assertEqual(5, bTree.value)
+        self.assertEqual(6, bTree.right.value)
+        bTree = init_tree((4,2,3,1))
+        bTree.delete(4)
+        self.assertEqual(2, bTree.value)
+        self.assertEqual(3, bTree.right.value)
+        self.assertEqual(1, bTree.left.value)
+
+    def test_delete_root(self):
+        bTree = init_tree((3,1,5,4,6))
+        bTree.delete(3) #deleting a node with two children
+        self.assertEqual(4, bTree.value)
+        self.assertEqual(5, bTree.right.value)
+        self.assertEqual(6, bTree.right.right.value)
+        self.assertIsNone(bTree.right.left)
+
+
+def init_tree(values=(2,1,3)):
     bTree = BinarySearchTree()
-    bTree.put(2)
-    bTree.put(1)
-    bTree.put(3)
+    for val in values:
+        bTree.put(val)
     return bTree
 
 
