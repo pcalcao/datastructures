@@ -41,8 +41,8 @@ class BinarySearchTree():
          Deleting a node with two children - find the minimum value on the right subtree and swap the value, deleting that node
         """
 
-        #If I'm a leaf and you want to delete me (shame on you)
         if self.value == value:
+            #If I'm a leaf and you want to delete me (shame on you)
             if self.is_leaf():
                 if self.parent.value < self.value: #I'm the right node
                     self.parent.right = None
@@ -51,13 +51,11 @@ class BinarySearchTree():
                     self.parent.left = None
                     self.parent = None
             else:
-                #todo: refactor
                 if self.left is None:
-                    other = self.right
-                    other.parent = None
-                    self.value = other.value
-                    self.left = other.left
-                    self.right = other.right
+                    self.right.parent = None
+                    self.value = self.right.value
+                    self.left = self.right.left
+                    self.right = self.right.right
                 elif self.right is None:
                     self.value = self.left.value
                     self.right = self.left.right
@@ -84,6 +82,19 @@ class BinarySearchTree():
         if self.is_leaf() or self.left is None:
             return self
         return self.left.find_minimum()
+
+    def traverse(self):
+        """
+        Traversal of the tree should return a list of values in an order such that, if they are inserted in that same order
+        into a new tree, the result has the exact same structure
+        """
+        yield self.value
+        if self.left is not None:
+            for x in self.left.traverse():
+                yield x
+        if self.right is not None:
+            for x in self.right.traverse():
+                yield x
 
 
 
