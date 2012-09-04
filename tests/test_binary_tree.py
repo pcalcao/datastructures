@@ -79,12 +79,14 @@ class TestBinaryTree(unittest.TestCase):
         tree_struct = (4, 2, 1, 3, 6, 5, 7)
         bTree = init_tree(tree_struct)
         nodes = tuple(x for x in bTree.traverse())
-
-        root = bTree.traverse()
-        print root
-
         self.assertTupleEqual(tree_struct, nodes)
 
+
+    def test_ordered_traversal(self):
+        tree_struct = (4, 2, 1, 3, 6, 5, 7)
+        bTree = init_tree(tree_struct)
+        nodes = tuple(x for x in bTree.ordered_traverse())
+        self.assertTupleEqual((1,2,3,4,5,6,7), nodes)
 
 
 

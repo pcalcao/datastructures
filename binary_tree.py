@@ -96,6 +96,15 @@ class BinarySearchTree():
             for x in self.right.traverse():
                 yield x
 
+    def ordered_traverse(self):
+        if self.left is not None:
+            for x in self.left.ordered_traverse():
+                yield x
+        yield self.value
+        if self.right is not None:
+            for x in self.right.ordered_traverse():
+                yield x
+
 
 
 
