@@ -24,6 +24,8 @@ class TestBinaryTree(unittest.TestCase):
         bTree.put(3)
         self.assertEqual(3, bTree.right.value)
         self.assertEqual(bTree, bTree.right.parent)
+        bTree.put(5)
+        self.assertEqual(5, bTree.right.right.value)
 
 
     def test_search(self):
@@ -48,19 +50,52 @@ class TestBinaryTree(unittest.TestCase):
         bTree.delete(3)
         self.assertIsNone(bTree.search(3))
 
-    def test_delete_root(self):
+    def test_find_minimum(self):
         bTree = init_tree()
-        self.assertEqual(bTree.search(2), bTree)
-        bTree.delete(2)
-        self.assertEqual(bTree.value, 3)
-        self.assertEqual(bTree.left, bTree.search(1))
-        self.assertIsNone(bTree.right)
+        min = bTree.find_minimum()
+        self.assertEqual(1, min.value)
 
-def init_tree():
+
+    def test_delete_root_one_child(self):
+        bTree = init_tree((3,5,4,6))
+        bTree.delete(3)
+        self.assertEqual(5, bTree.value)
+        self.assertEqual(6, bTree.right.value)
+        bTree = init_tree((4,2,3,1))
+        bTree.delete(4)
+        self.assertEqual(2, bTree.value)
+        self.assertEqual(3, bTree.right.value)
+        self.assertEqual(1, bTree.left.value)
+
+    def test_delete_root(self):
+        bTree = init_tree((3,1,5,4,6))
+        bTree.delete(3) #deleting a node with two children
+        self.assertEqual(4, bTree.value)
+        self.assertEqual(5, bTree.right.value)
+        self.assertEqual(6, bTree.right.right.value)
+        self.assertIsNone(bTree.right.left)
+
+    def test_traversal(self):
+        tree_struct = (4, 2, 1, 3, 6, 5, 7)
+        bTree = init_tree(tree_struct)
+        nodes = tuple(x for x in bTree.traverse())
+        self.assertTupleEqual(tree_struct, nodes)
+
+
+    def test_ordered_traversal(self):
+        tree_struct = (4, 2, 1, 3, 6, 5, 7)
+        bTree = init_tree(tree_struct)
+        nodes = tuple(x for x in bTree.ordered_traverse())
+        self.assertTupleEqual((1,2,3,4,5,6,7), nodes)
+
+
+
+
+
+def init_tree(values=(2,1,3)):
     bTree = BinarySearchTree()
-    bTree.put(2)
-    bTree.put(1)
-    bTree.put(3)
+    for val in values:
+        bTree.put(val)
     return bTree
 
 
