@@ -83,6 +83,11 @@ class BinarySearchTree():
             return self
         return self.left.find_minimum()
 
+    def find_maximum(self):
+        if self.is_leaf() or self.right is None:
+            return self
+        return self.right.find_maximum()
+
     def traverse(self):
         """
         Traversal of the tree should return a list of values in an order such that, if they are inserted in that same order
@@ -104,6 +109,7 @@ class BinarySearchTree():
         if self.right is not None:
             for x in self.right.ordered_traverse():
                 yield x
+
 
 
 

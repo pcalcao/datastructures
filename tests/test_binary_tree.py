@@ -88,6 +88,12 @@ class TestBinaryTree(unittest.TestCase):
         nodes = tuple(x for x in bTree.ordered_traverse())
         self.assertTupleEqual((1,2,3,4,5,6,7), nodes)
 
+    def test_find_max(self):
+        tree_struct = (4, 2, 1, 3, 6, 5, 7)
+        bTree = init_tree(tree_struct)
+        self.assertEqual(7, bTree.find_maximum().value)
+
+
 
 
 
