@@ -2,33 +2,33 @@
 
 class BinarySearchTree():
     def __init__(self):
-        self.value = None
+        self.key = None
         self.left = None
         self.right = None
         self.parent = None
 
     def put(self, value):
-        if self.value is None:
-            self.value = value
-        elif value < self.value:
+        if self.key is None:
+            self.key = value
+        elif value < self.key:
             if self.left is None:
                 self.left = BinarySearchTree()
                 self.left.parent = self
             self.left.put(value)
-        elif value > self.value:
+        elif value > self.key:
             if self.right is None:
                 self.right = BinarySearchTree()
                 self.right.parent = self
             self.right.put(value)
 
     def search(self, value):
-        if value  == self.value:
+        if value  == self.key:
             return self
 
-        if value < self.value and self.left is not None:
+        if value < self.key and self.left is not None:
             return self.left.search(value)
 
-        if value > self.value and self.right is not None:
+        if value > self.key and self.right is not None:
             return self.right.search(value)
 
         return None
@@ -41,23 +41,23 @@ class BinarySearchTree():
          Deleting a node with two children - find the minimum value on the right subtree and swap the value, deleting that node
         """
 
-        if self.value == value:
+        if self.key == value:
             #If I'm a leaf and you want to delete me (shame on you)
             if self.is_leaf():
-                if self.parent.value < self.value: #I'm the right node
+                if self.parent.key < self.key: #I'm the right node
                     self.parent.right = None
                     self.parent = None
-                elif self.parent.value > self.value: #I'm the left node
+                elif self.parent.key > self.key: #I'm the left node
                     self.parent.left = None
                     self.parent = None
             else:
                 if self.left is None:
                     self.right.parent = None
-                    self.value = self.right.value
+                    self.key = self.right.key
                     self.left = self.right.left
                     self.right = self.right.right
                 elif self.right is None:
-                    self.value = self.left.value
+                    self.key = self.left.key
                     self.right = self.left.right
                     self.left = self.left.left
                     self.left.parent = None
@@ -66,11 +66,11 @@ class BinarySearchTree():
                     min_parent = minimum.parent
                     min_parent.left = None
                     minimum.parent = None
-                    self.value = minimum.value
+                    self.key = minimum.key
 
-        elif value > self.value and self.right is not None:
+        elif value > self.key and self.right is not None:
             self.right.delete(value)
-        elif  value < self.value and self.left is not None:
+        elif  value < self.key and self.left is not None:
             self.left.delete(value)
 
 
@@ -93,7 +93,7 @@ class BinarySearchTree():
         Traversal of the tree should return a list of values in an order such that, if they are inserted in that same order
         into a new tree, the result has the exact same structure
         """
-        yield self.value
+        yield self.key
         if self.left is not None:
             for x in self.left.traverse():
                 yield x
@@ -105,7 +105,7 @@ class BinarySearchTree():
         if self.left is not None:
             for x in self.left.ordered_traverse():
                 yield x
-        yield self.value
+        yield self.key
         if self.right is not None:
             for x in self.right.ordered_traverse():
                 yield x
