@@ -1,39 +1,39 @@
 #!/etc/python
 
 class BinarySearchTree():
-    def __init__(self):
+    def __init__(self, parent=None):
         self.key = None
+        self.value = None
         self.left = None
         self.right = None
-        self.parent = None
+        self.parent = parent
 
-    def put(self, value):
+    def __setitem__(self, key, value):
         if self.key is None:
-            self.key = value
-        elif value < self.key:
+            self.key = key
+            self.value = value
+        elif key < self.key:
             if self.left is None:
-                self.left = BinarySearchTree()
-                self.left.parent = self
-            self.left.put(value)
-        elif value > self.key:
+                self.left = BinarySearchTree(self)
+            self.left.__setitem__(key, value)
+        elif key > self.key:
             if self.right is None:
-                self.right = BinarySearchTree()
-                self.right.parent = self
-            self.right.put(value)
+                self.right = BinarySearchTree(self)
+            self.right.__setitem__(key, value)
+        elif key == self.key:
+            self.value = value
 
-    def search(self, value):
-        if value  == self.key:
-            return self
-
-        if value < self.key and self.left is not None:
-            return self.left.search(value)
-
-        if value > self.key and self.right is not None:
-            return self.right.search(value)
-
+    def __getitem__(self, key):
+        if key  == self.key:
+            return self.value
+        if key < self.key and self.left is not None:
+            return self.left.__getitem__(key)
+        if key > self.key and self.right is not None:
+            return self.right.__getitem__(key)
         return None
 
-    def delete(self, value):
+
+    def __delitem__(self, key):
         """
         Base cases are:
          Deleting a leaf - trivial
@@ -41,52 +41,49 @@ class BinarySearchTree():
          Deleting a node with two children - find the minimum value on the right subtree and swap the value, deleting that node
         """
 
-        if self.key == value:
+        if self.key == key:
             #If I'm a leaf and you want to delete me (shame on you)
             if self.is_leaf():
-                if self.parent.key < self.key: #I'm the right node
-                    self.parent.right = None
-                    self.parent = None
+                if self.parent is None: #deleting the root, no children
+                    self.key = None
+                    self.value = None
                 elif self.parent.key > self.key: #I'm the left node
                     self.parent.left = None
+                    self.parent = None
+                elif  self.parent.key < self.key: #I'm the right node
+                    self.parent.right = None
                     self.parent = None
             else:
                 if self.left is None:
                     self.right.parent = None
-                    self.key = self.right.key
-                    self.left = self.right.left
-                    self.right = self.right.right
+                    self.__copy_node(self.right)
                 elif self.right is None:
-                    self.key = self.left.key
-                    self.right = self.left.right
-                    self.left = self.left.left
                     self.left.parent = None
+                    self.__copy_node(self.left)
                 else: #both children
-                    minimum = self.right.find_minimum()
+                    minimum = self.right.find_min_key()
                     min_parent = minimum.parent
                     min_parent.left = None
                     minimum.parent = None
                     self.key = minimum.key
 
-        elif value > self.key and self.right is not None:
-            self.right.delete(value)
-        elif  value < self.key and self.left is not None:
-            self.left.delete(value)
-
-
+        elif key > self.key and self.right is not None:
+            self.right.__delitem__(key)
+        elif  key < self.key and self.left is not None:
+            self.left.__delitem__(key)
 
     def is_leaf(self):
         return self.left is None and self.right is None
 
-    def find_minimum(self):
+    def find_min_key(self):
         if self.is_leaf() or self.left is None:
-            return self
-        return self.left.find_minimum()
+            return self.key
+        return self.left.find_min_key()
 
-    def find_maximum(self):
+    def find_max_key(self):
         if self.is_leaf() or self.right is None:
-            return self
-        return self.right.find_maximum()
+            return self.key
+        return self.right.find_max_key()
 
     def traverse(self):
         """
@@ -111,12 +108,8 @@ class BinarySearchTree():
                 yield x
 
 
-
-
-
-
-
-
-
-
-
+    def __copy_node(self, other_node):
+        self.key = other_node.key
+        self.value = other_node.value
+        self.left = other_node.left
+        self.right = other_node.right
