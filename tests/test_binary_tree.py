@@ -71,44 +71,23 @@ class TestBinaryTree(unittest.TestCase):
         self.assertEqual(2, bTree.left.key)
         self.assertEqual(5, bTree.right.key)
 
-
     def test_find_minimum(self):
         bTree = init_tree()
         min = bTree.find_min_key()
         self.assertEqual(1, min)
 
-#
-#    def test_delete_root_one_child(self):
-#        bTree = init_tree((3,5,4,6))
-#        bTree.delete(3)
-#        self.assertEqual(5, bTree.key)
-#        self.assertEqual(6, bTree.right.key)
-#        bTree = init_tree((4,2,3,1))
-#        bTree.delete(4)
-#        self.assertEqual(2, bTree.key)
-#        self.assertEqual(3, bTree.right.key)
-#        self.assertEqual(1, bTree.left.key)
-#
-#    def test_delete_root(self):
-#        bTree = init_tree((3,1,5,4,6))
-#        bTree.delete(3) #deleting a node with two children
-#        self.assertEqual(4, bTree.key)
-#        self.assertEqual(5, bTree.right.key)
-#        self.assertEqual(6, bTree.right.right.key)
-#        self.assertIsNone(bTree.right.left)
-#
-#    def test_traversal(self):
-#        tree_struct = (4, 2, 1, 3, 6, 5, 7)
-#        bTree = init_tree(tree_struct)
-#        nodes = tuple(x for x in bTree.traverse())
-#        self.assertTupleEqual(tree_struct, nodes)
-#
-#
-#    def test_ordered_traversal(self):
-#        tree_struct = (4, 2, 1, 3, 6, 5, 7)
-#        bTree = init_tree(tree_struct)
-#        nodes = tuple(x for x in bTree.ordered_traverse())
-#        self.assertTupleEqual((1,2,3,4,5,6,7), nodes)
+    def test_traversal(self):
+        tree_struct = (4, 2, 1, 3, 6, 5, 7)
+        tree_vals = (40, 20, 10, 30, 60, 50, 70)
+        bTree = init_tree(tree_struct, tree_vals)
+        nodes = tuple(x for x in bTree.traverse())
+        self.assertTupleEqual(tree_struct, nodes)
+
+    def test_ordered_traversal(self):
+        tree_struct = (4, 2, 1, 3, 6, 5, 7)
+        bTree = init_tree(tree_struct, tree_struct)
+        nodes = tuple(x for x in bTree.ordered_traverse())
+        self.assertTupleEqual((1,2,3,4,5,6,7), nodes)
 
     def test_find_max(self):
         tree_struct = (4, 2, 1, 3, 6, 5, 7)
