@@ -24,14 +24,17 @@ class BinarySearchTree():
             self.value = value
 
     def __getitem__(self, key):
-        if key  == self.key:
-            return self.value
-        if key < self.key and self.left is not None:
-            return self.left.__getitem__(key)
-        if key > self.key and self.right is not None:
-            return self.right.__getitem__(key)
-        return None
+        subtree = self._getsubtree(key)
+        return subtree.value if subtree else None
 
+    def _getsubtree(self, key):
+        if key  == self.key:
+            return self
+        if key < self.key and self.left is not None:
+            return self.left._getsubtree(key)
+        if key > self.key and self.right is not None:
+            return self.right._getsubtree(key)
+        return None        
 
     def __delitem__(self, key):
         """

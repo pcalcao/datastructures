@@ -44,8 +44,8 @@ class TestSplayTree(unittest.TestCase):
 
     def test_splay(self):
         bTree = init_tree()
-        bTree.splay(1) 
-        #self.assertEqual(1, bTree.key)
+        val = bTree[1]
+        self.assertEqual(1, bTree._innertree.key)
 
         
 

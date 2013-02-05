@@ -11,14 +11,28 @@ class SplayTree():
         self._innertree[key] = value
 
     def __getitem__(self, key):
+        if self._innertree.key != key:
+            #upgrade to root
+            self.__splay(key)
         return self._innertree[key]
 
     def __delitem__(self, key):
         del self._innertree[key]
 
-    def splay(self, key):
-        if self._innertree.parent:
-            if not self._innertree.parent.parent:
-                #zig
-                pass
+    def __splay(self, key):
+        print key
+        subtree = self._innertree._getsubtree(key)
+        print subtree.parent
+        print subtree.parent.parent
+        if not subtree.parent.parent:
+            self.zig(key)
+
+    def zig(self, key):
+        pass
+
+    def zigzig(self, key):
+        pass
+
+    def zigzag(self, key):
+        pass
 
