@@ -9,6 +9,7 @@ class SplayTree():
 
     def __setitem__(self, key, value):
         self._innertree[key] = value
+        self.__splay(key)
 
     def __getitem__(self, key):
         if self._innertree.key != key:
@@ -17,6 +18,7 @@ class SplayTree():
         return self._innertree[key]
 
     def __delitem__(self, key):
+        self.__splay(key)
         del self._innertree[key]
 
     def __splay(self, key):
@@ -30,6 +32,7 @@ class SplayTree():
                     #both element and parent are on the same subtree 
                     self.__zigzig(subtree)
                 else:
+                    #element is one subtree, parent is in another
                     self.__zigzag(subtree)
             self._innertree = subtree
 
@@ -54,7 +57,6 @@ class SplayTree():
             parent.parent = subtree
             parent.right = leftside
             subtree.parent = gparent
-
 
     def __zigzig(self, subtree):
         self.__zig(subtree.parent)
