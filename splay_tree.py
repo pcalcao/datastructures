@@ -30,12 +30,16 @@ class SplayTree():
                     #both element and parent are on the same subtree 
                     self.__zigzig(subtree)
                 else:
-                    pass
+                    self.__zigzag(subtree)
             self._innertree = subtree
 
     def __zig(self, subtree):
         parent = subtree.parent
         gparent = subtree.parent.parent
+        if gparent and self.__isleftchild(parent):
+            gparent.left = subtree
+        elif gparent and self.__isrightchild(parent):
+            gparent.right = subtree
         #rotate to the right if node is left child
         if self.__isleftchild(subtree):
             rightside = subtree.right
@@ -51,13 +55,15 @@ class SplayTree():
             parent.right = leftside
             subtree.parent = gparent
 
+
     def __zigzig(self, subtree):
         self.__zig(subtree.parent)
         self.__zig(subtree)
 
-    def __zigzag(self, key):
-        pass
-
+    def __zigzag(self, subtree):
+        self.__zig(subtree)
+        self.__zig(subtree)
+        
     def __should_zig(self, subtree):
         return subtree.parent.parent is None
 

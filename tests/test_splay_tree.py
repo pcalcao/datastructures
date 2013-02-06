@@ -57,6 +57,7 @@ class TestSplayTree(unittest.TestCase):
         val = bTree[3]
         self.assertEqual(3, bTree._innertree.key)
         self.assertEqual(2, bTree._innertree.left.key)
+        self.assertEqual(3, bTree._innertree.left.parent.key)
         self.assertIsNone(bTree._innertree.right)
         self.assertIsNone(bTree._innertree.parent)
 
@@ -69,6 +70,13 @@ class TestSplayTree(unittest.TestCase):
         bTree = init_tree((4,2,1,3,6,5,7), (4,2,1,3,6,5,7))   
         val = bTree[7] 
         self.assertEqual(7, bTree._innertree.key)
+
+    def test_splay_zigzag(self):
+        bTree = init_tree((4,2,1,3,6,5,7), (4,2,1,3,6,5,7))   
+        val = bTree[5]
+        self.assertEqual(5, bTree._innertree.key)
+        pass
+
 
 
 def init_tree(keys=(2,1,3), items=("v1","v2","v3")):
