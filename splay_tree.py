@@ -20,19 +20,58 @@ class SplayTree():
         del self._innertree[key]
 
     def __splay(self, key):
-        print key
         subtree = self._innertree._getsubtree(key)
-        print subtree.parent
-        print subtree.parent.parent
-        if not subtree.parent.parent:
-            self.zig(key)
+        if subtree:
+            while not subtree.parent is None:
+                if self.__should_zig(subtree):
+                    #parent is root
+                    self.__zig(subtree)
+                elif self.__should_zigzig(subtree):
+                    #both element and parent are on the same subtree 
+                    self.__zigzig(subtree)
+                else:
+                    pass
+            self._innertree = subtree
 
-    def zig(self, key):
+    def __zig(self, subtree):
+        parent = subtree.parent
+        gparent = subtree.parent.parent
+        #rotate to the right if node is left child
+        if self.__isleftchild(subtree):
+            rightside = subtree.right
+            subtree.right = parent
+            parent.parent = subtree
+            parent.left = rightside
+            subtree.parent = gparent
+        #rotate to the left if node is right child
+        elif self.__isrightchild(subtree):
+            leftside = subtree.left
+            subtree.left = parent
+            parent.parent = subtree
+            parent.right = leftside
+            subtree.parent = gparent
+
+    def __zigzig(self, subtree):
+        self.__zig(subtree.parent)
+        self.__zig(subtree)
+
+    def __zigzag(self, key):
         pass
 
-    def zigzig(self, key):
-        pass
+    def __should_zig(self, subtree):
+        return subtree.parent.parent is None
 
-    def zigzag(self, key):
-        pass
+    def __should_zigzig(self, subtree):
+        return self.__bothleft(subtree, subtree.parent) or self.__bothright(subtree,subtree.parent)
 
+    def __isleftchild(self, subtree):
+        return subtree.parent.left == subtree
+
+    def __isrightchild(self, subtree):
+        return subtree.parent.right == subtree 
+
+    def __bothleft(self, subtree1, subtree2):
+        return self.__isleftchild(subtree1) and self.__isleftchild(subtree2)     
+
+    def __bothright(self, subtree1, subtree2):
+        return self.__isrightchild(subtree1) and self.__isrightchild(subtree2) 
