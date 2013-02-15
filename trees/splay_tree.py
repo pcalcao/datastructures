@@ -2,6 +2,7 @@
 
 from binary_tree import BinarySearchTree
 
+
 class SplayTree():
 
     def __init__(self, inner_tree=None):
@@ -13,7 +14,7 @@ class SplayTree():
 
     def __getitem__(self, key):
         if self._innertree.key != key:
-            #upgrade to root
+            # upgrade to root
             self.__splay(key)
         return self._innertree[key]
 
@@ -26,13 +27,13 @@ class SplayTree():
         if subtree:
             while not subtree.parent is None:
                 if self.__should_zig(subtree):
-                    #parent is root
+                    # parent is root
                     self.__zig(subtree)
                 elif self.__should_zigzig(subtree):
-                    #both element and parent are on the same subtree 
+                    # both element and parent are on the same subtree
                     self.__zigzig(subtree)
                 else:
-                    #element is one subtree, parent is in another
+                    # element is one subtree, parent is in another
                     self.__zigzag(subtree)
             self._innertree = subtree
 
@@ -43,14 +44,14 @@ class SplayTree():
             gparent.left = subtree
         elif gparent and self.__isrightchild(parent):
             gparent.right = subtree
-        #rotate to the right if node is left child
+        # rotate to the right if node is left child
         if self.__isleftchild(subtree):
             rightside = subtree.right
             subtree.right = parent
             parent.parent = subtree
             parent.left = rightside
             subtree.parent = gparent
-        #rotate to the left if node is right child
+        # rotate to the left if node is right child
         elif self.__isrightchild(subtree):
             leftside = subtree.left
             subtree.left = parent
@@ -65,21 +66,21 @@ class SplayTree():
     def __zigzag(self, subtree):
         self.__zig(subtree)
         self.__zig(subtree)
-        
+
     def __should_zig(self, subtree):
         return subtree.parent.parent is None
 
     def __should_zigzig(self, subtree):
-        return self.__bothleft(subtree, subtree.parent) or self.__bothright(subtree,subtree.parent)
+        return self.__bothleft(subtree, subtree.parent) or self.__bothright(subtree, subtree.parent)
 
     def __isleftchild(self, subtree):
         return subtree.parent.left == subtree
 
     def __isrightchild(self, subtree):
-        return subtree.parent.right == subtree 
+        return subtree.parent.right == subtree
 
     def __bothleft(self, subtree1, subtree2):
-        return self.__isleftchild(subtree1) and self.__isleftchild(subtree2)     
+        return self.__isleftchild(subtree1) and self.__isleftchild(subtree2)
 
     def __bothright(self, subtree1, subtree2):
-        return self.__isrightchild(subtree1) and self.__isrightchild(subtree2) 
+        return self.__isrightchild(subtree1) and self.__isrightchild(subtree2)
