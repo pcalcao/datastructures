@@ -1,7 +1,7 @@
 __author__ = 'pcalcao'
 
 import unittest
-from binary_tree import BinarySearchTree
+from binary_search_tree import BinarySearchTree
 
 
 class TestBinaryTree(unittest.TestCase):

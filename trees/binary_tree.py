@@ -1,118 +1,35 @@
-#!/etc/python
-
-class BinarySearchTree():
-    def __init__(self, parent=None):
-        self.key = None
-        self.value = None
+class BinaryTree():
+    def __init__(self, val):
+        self.value = val
         self.left = None
         self.right = None
-        self.parent = parent
+        self.parent = None
 
-    def __setitem__(self, key, value):
-        if self.key is None:
-            self.key = key
-            self.value = value
-        elif key < self.key:
-            if self.left is None:
-                self.left = BinarySearchTree(self)
-            self.left.__setitem__(key, value)
-        elif key > self.key:
-            if self.right is None:
-                self.right = BinarySearchTree(self)
-            self.right.__setitem__(key, value)
-        elif key == self.key:
-            self.value = value
+    def set_left(self,node):
+        self.left = node
+        self.left.parent = self
 
-    def __getitem__(self, key):
-        subtree = self._getsubtree(key)
-        return subtree.value if subtree else None
+    def set_right(self,node):
+        self.right = node
+        self.right.parent = self
 
-    def _getsubtree(self, key):
-        if key  == self.key:
-            return self
-        if key < self.key and self.left is not None:
-            return self.left._getsubtree(key)
-        if key > self.key and self.right is not None:
-            return self.right._getsubtree(key)
-        return None        
-
-    def __delitem__(self, key):
-        """
-        Base cases are:
-         Deleting a leaf - trivial
-         Deleting a node with one child only - switch the value with the child
-         Deleting a node with two children - find the minimum value on the right subtree and swap the value, deleting that node
-        """
-
-        if self.key == key:
-            #If I'm a leaf and you want to delete me (shame on you)
-            if self.is_leaf():
-                if self.parent is None: #deleting the root, no children
-                    self.key = None
-                    self.value = None
-                elif self.parent.key > self.key: #I'm the left node
-                    self.parent.left = None
-                    self.parent = None
-                elif  self.parent.key < self.key: #I'm the right node
-                    self.parent.right = None
-                    self.parent = None
-            else:
-                if self.left is None:
-                    self.right.parent = None
-                    self.__copy_node(self.right)
-                elif self.right is None:
-                    self.left.parent = None
-                    self.__copy_node(self.left)
-                else: #both children
-                    minimum = self.right.find_min_key()
-                    min_parent = minimum.parent
-                    min_parent.left = None
-                    minimum.parent = None
-                    self.key = minimum.key
-
-        elif key > self.key and self.right is not None:
-            self.right.__delitem__(key)
-        elif  key < self.key and self.left is not None:
-            self.left.__delitem__(key)
-
-    def is_leaf(self):
-        return self.left is None and self.right is None
-
-    def find_min_key(self):
-        if self.is_leaf() or self.left is None:
-            return self.key
-        return self.left.find_min_key()
-
-    def find_max_key(self):
-        if self.is_leaf() or self.right is None:
-            return self.key
-        return self.right.find_max_key()
-
-    def traverse(self):
-        """
-        Traversal of the tree should return a list of values in an order such that, if they are inserted in that same order
-        into a new tree, the result has the exact same structure
-        """
-        yield self.key
-        if self.left is not None:
-            for x in self.left.traverse():
-                yield x
-        if self.right is not None:
-            for x in self.right.traverse():
-                yield x
-
-    def ordered_traverse(self):
-        if self.left is not None:
-            for x in self.left.ordered_traverse():
-                yield x
-        yield self.key
-        if self.right is not None:
-            for x in self.right.ordered_traverse():
-                yield x
+    def inorder(self):
+        left_vals = self.left.inorder() if self.left is not None else []
+        right_vals = self.right.inorder() if self.right is not None else []
+        return left_vals + [self.value] + right_vals
 
 
-    def __copy_node(self, other_node):
-        self.key = other_node.key
-        self.value = other_node.value
-        self.left = other_node.left
-        self.right = other_node.right
+if __name__ == '__main__':
+    tree = BinaryTree(4)
+    left = BinaryTree(3)
+    left.set_left(BinaryTree(1))
+    left.set_right(BinaryTree(20))
+    right = BinaryTree(7)
+    right.set_left(BinaryTree(6))
+    right.set_right(BinaryTree(30))
+    tree.set_left(left)
+    tree.set_right(right)
+
+    print tree.inorder()
+
+
