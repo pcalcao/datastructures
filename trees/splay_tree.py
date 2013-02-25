@@ -16,11 +16,16 @@ class SplayTree():
         if self._innertree.key != key:
             # upgrade to root
             self.__splay(key)
-        return self._innertree[key]
+        #we only bother in getting the value _if_ we splayed with success, otherwise 
+        #the element doesn't exist
+        if self._innertree.key == key:
+            return self._innertree[key]
 
     def __delitem__(self, key):
         self.__splay(key)
-        del self._innertree[key]
+        #we do this test for the same reason we do it in __getitem__
+        if self._innertree.key == key:
+            del self._innertree[key]
 
     def __splay(self, key):
         subtree = self._innertree._getsubtree(key)
