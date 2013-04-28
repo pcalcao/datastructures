@@ -9,3 +9,7 @@ class TestTrie(unittest.TestCase):
 		trie = Trie()
 		self.assertEqual(defaultdict(Trie), trie.root)
 		self.assertIsNone(trie.value)
+
+	def test_insert_word(self):
+		trie = Trie()
+		
